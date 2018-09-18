@@ -1,0 +1,17 @@
+{
+  "name": "fourbot",
+  "version": "1.0.0",
+  "description": "The best bot the world has ever seen!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ryan Hines",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.4.2",
+    "node-opus": "^0.3.0",
+    "ytdl-core": "^0.25.2"
+  },
+  "devDependencies": {}
+}
