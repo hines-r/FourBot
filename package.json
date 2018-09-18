@@ -13,5 +13,13 @@
     "node-opus": "^0.3.0",
     "ytdl-core": "^0.25.2"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hines-r/FourBot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hines-r/FourBot/issues"
+  },
+  "homepage": "https://github.com/hines-r/FourBot#readme"
 }
