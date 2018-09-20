@@ -12,17 +12,17 @@ const coin = [
 
 // TODO: perhaps move this to a separate file and change the switch statement to use it
 const commands = [
-    '4play',
-    '4skip',
-    '4stop',
-    '4volume',
-    '4repeat',
-    '4np',
-    '4queue',
-    '4pause',
-    '4resume',
-    '4flip',
-    '4choose'
+    'play',
+    'skip',
+    'stop',
+    'volume',
+    'repeat',
+    'np',
+    'queue',
+    'pause',
+    'resume',
+    'flip',
+    'choose'
 ];
 
 const maxVolume = 10;
@@ -221,7 +221,7 @@ client.on('message', async message => {
         }
         case 'help': {
             const embed = new Discord.RichEmbed()
-                .addField('**Command list**', `${commands.map(command => `**-** ${command}`).join('\n')}`);
+                .addField('**Command list**', `${commands.map(command => `**-** ${PREFIX}${command}`).join('\n')}`);
                 
             message.channel.send(embed);
             break;
