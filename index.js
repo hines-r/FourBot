@@ -168,6 +168,7 @@ client.on('message', async message => {
             if (!serverQueue) return message.channel.send('There is nothing playing!');
 
             const embed = new Discord.RichEmbed()
+                .setColor(randomColor())
                 .addField('**Song queue:**', `${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}`)
                 .setFooter(`Now playing: ${serverQueue.songs[0].title}`);
 
@@ -219,6 +220,7 @@ client.on('message', async message => {
         }
         case 'help': {
             const embed = new Discord.RichEmbed()
+                .setColor(randomColor())
                 .addField('**Command list**', `${commands.map(command => `**-** ${PREFIX}${command}`).join('\n')}`);
                 
             message.channel.send(embed);
@@ -273,6 +275,20 @@ function randomRoll(min, max) {
 
 function flipCoin() {
     return coin[randomRoll(0, coin.length - 1)]
+}
+
+// Returns a random RGB color in the form of [r, g, b]
+function randomColor() {
+    const maxRange = 255;
+    
+    // Assigns a random color value to RGB values
+    const r = randomRoll(0, maxRange);
+    const g = randomRoll(0, maxRange);
+    const b = randomRoll(0, maxRange);
+
+    const color = [r, g, b];
+
+    return color;
 }
 
 client.login(TOKEN);
