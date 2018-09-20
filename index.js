@@ -227,7 +227,7 @@ client.on('message', async message => {
             break;
         }
         default: {
-            message.channel.send('Unknown command! Type **4help** to see full list!');
+            message.channel.send(`Unknown command! Type **${PREFIX}help** to see full list!`);
         }
     }
 });
