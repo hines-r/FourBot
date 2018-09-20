@@ -209,13 +209,11 @@ client.on('message', async message => {
                 itemString += ' ' + args[i];
             }
 
-             // Gets all items separated by a comma
-            const items = itemString.split(',');
+             // Gets all items separated by a comma and places them in an array
+             // Also trims each item to get rid of leading and trailing white space
+            const items = itemString.split(',').map(string => string.trim());
 
-            // Trims any leading and trailing white space from items
-            const choices = items.map(string => string.trim());
-
-            const result = choices[randomRoll(0, choices.length - 1)];
+            const result = items[randomRoll(0, items.length - 1)];
             message.channel.send(`I choose **${result}**!`)          
             break;
         }
