@@ -32,7 +32,10 @@ client.on('warn', console.warn);
 
 client.on('error', console.error);
 
-client.on('ready', () => console.log(`${client.user.username} is online!`));
+client.on('ready', () => {
+    console.log(`${client.user.username} is online!`);
+    client.user.setActivity(`${PREFIX}`); // Sets currently playing text
+});
 
 client.on('disconnect', () => console.log('Disconnected!'));
 
