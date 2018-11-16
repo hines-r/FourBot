@@ -1,10 +1,10 @@
 # FourBot
 
-A multipurpose Discord bot currently in development.
+A multipurpose Discord bot built for friends and listening to music.
 
 <h1>Instructions</h1>
 
 ```
-npm i
-edit config.js (enter bot token and desired prefix)
+1. npm i
+2. edit config.js (enter bot token and desired prefix)
 ```
