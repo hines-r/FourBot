@@ -128,6 +128,15 @@ client.on('message', async message => {
             if (!serverQueue) return message.channel.send('There is nothing playing!');
             if (!args[1]) return message.channel.send(`The current volume is: **${serverQueue.volume}**`);
 
+            if (args[1].toString().toLowerCase() == "max") {
+                setVolume(message.guild, maxVolume);
+                return;
+            }
+            else if (args[1].toString().toLowerCase() == "min") {
+                setVolume(message.guild, 1);
+                return;
+            }
+
             const volInput = parseInt(args[1]); // Attempts to convert the input to an integer value
 
             // Checks to see if the conversion was successful and if the value is between 0 and maxVolume
@@ -135,9 +144,7 @@ client.on('message', async message => {
                 return message.channel.send('Please enter a value between 1 and 10!')
             }
 
-            serverQueue.volume = volInput;
-            serverQueue.connection.dispatcher.setVolumeLogarithmic(volInput / maxVolume);
-            message.channel.send(`Set volume to: **${serverQueue.volume}**`);
+            setVolume(message.guild, volInput);
             break;
         }
         case 'repeat': {
@@ -269,6 +276,14 @@ function play(guild, song) {
     dispatcher.setVolumeLogarithmic(serverQueue.volume / maxVolume);
 
     serverQueue.textChannel.send(`Start playing: **${song.title}**`);
+}
+
+function setVolume(guild, volInput) {
+    const serverQueue = queue.get(guild.id);
+
+    serverQueue.volume = volInput;
+    serverQueue.connection.dispatcher.setVolumeLogarithmic(volInput / maxVolume);
+    serverQueue.textChannel.send(`Set volume to: **${serverQueue.volume}**`);
 }
 
 // Returns a random whole number between a min and max value
