@@ -1,8 +1,10 @@
 const Discord = require('discord.js');
-const { TOKEN, PREFIX, DEJA_VU, BEYOND } = require('./config');
+const { TOKEN, PREFIX, GOOGLE_API_KEY, DEJA_VU, BEYOND } = require('./config');
 const ytdl = require('ytdl-core');
+const YouTube = require('simple-youtube-api');
 
 const client = new Discord.Client();
+const youtube = new YouTube(GOOGLE_API_KEY);
 const queue = new Map();
 
 const coin = [
@@ -54,6 +56,8 @@ client.on('message', async message => {
     const args = message.content.substring(PREFIX.length).split(' ');
     const serverQueue = queue.get(message.guild.id);
 
+    var searchString = args.slice(1).join(' ');
+
     switch (args[0].toLowerCase()) {
         case 'play': {
             const voiceChannel = message.member.voiceChannel;
@@ -63,16 +67,33 @@ client.on('message', async message => {
             if (!permissions.has('CONNECT')) return message.channel.send('Cannot connect due to permissions!');
             if (!permissions.has('SPEAK')) return message.channel.send('Cannot speak due to permissions!');
 
-            let url;
+            if (!args[1]) return message.channel.send('Please input a valid search or url!');
 
-            if (args[1].toLowerCase().trim() == 'dejavu') url = DEJA_VU;
-            else if (args[1].toLowerCase().trim() == 'beyond') url = BEYOND;
-            else url = args[1];
+            // As specified by config.js, sets the search string to preset URL
+            if (searchString.toLowerCase() == 'dejavu') {
+                searchString = DEJA_VU;
+            }
+            else if (searchString.toLowerCase() == 'beyond') {
+                searchString = BEYOND;
+            }
 
-            const songInfo = await ytdl.getInfo(url);
+            // Tries to get the first video search result on YouTube
+            try {
+                var video = await youtube.getVideo(searchString);
+            } catch (error) {
+                try {
+                    var videos = await youtube.searchVideos(searchString, 1); // Gets first search result
+                    var video = await youtube.getVideoByID(videos[0].id);
+                } catch (error) {
+                    console.error(error);
+                    return message.channel.send(`No search results found... :()`)
+                }
+            }
+
             const song = {
-                title: Discord.Util.escapeMarkdown(songInfo.title), // Will exclude markdown in title (ex. quotes)
-                url: songInfo.video_url,
+                id: video.id,
+                title: video.title,
+                url: `https://www.youtube.com/watch?v=${video.id}` // Generic URL to pass in video id
             };
 
             if (!serverQueue) {
@@ -127,7 +148,7 @@ client.on('message', async message => {
             if (!message.member.voiceChannel) return message.channel.send('You are not in a voice channel!');
             if (!serverQueue) return message.channel.send('There is nothing playing!');
             if (!args[1]) return message.channel.send(`The current volume is: **${serverQueue.volume}**`);
-
+            
             if (args[1].toString().toLowerCase() == "max") {
                 setVolume(message.guild, maxVolume);
                 return;
