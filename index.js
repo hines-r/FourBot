@@ -220,9 +220,10 @@ client.on('message', async message => {
         case 'queue': {
             if (!serverQueue) return message.channel.send('There is nothing playing!');
 
+            let index = 0;
             const embed = new Discord.RichEmbed()
                 .setColor(randomColor())
-                .addField('**Song queue:**', `${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}`)
+                .addField('**Song queue:**', `${serverQueue.songs.map(song => `**${++index} -** ${song.title}`).join('\n')}`)
                 .setFooter(`Now playing: ${serverQueue.songs[0].title}`);
 
             message.channel.send(embed);
