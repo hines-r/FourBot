@@ -79,7 +79,7 @@ client.on('message', async message => {
                 searchString = BEYOND;
             }
 
-            // Tries to get the first video search result on YouTube
+            // Tries to get the specified number of search results via YouTube search
             try {
                 var video = await youtube.getVideo(searchString);
             } catch (error) {
