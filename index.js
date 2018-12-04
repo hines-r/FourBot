@@ -30,6 +30,8 @@ const commands = [
 const maxVolume = 10;
 const defaultVolume = 5;
 
+const maxSearchResults = 10;
+
 client.on('warn', console.warn);
 
 client.on('error', console.error);
@@ -82,11 +84,31 @@ client.on('message', async message => {
                 var video = await youtube.getVideo(searchString);
             } catch (error) {
                 try {
-                    var videos = await youtube.searchVideos(searchString, 1); // Gets first search result
-                    var video = await youtube.getVideoByID(videos[0].id);
+                    let videos = await youtube.searchVideos(searchString, maxSearchResults);
+                    let index = 0;
+                    const embed = new Discord.RichEmbed()
+                        .setColor(randomColor())
+                        .addField('**Song selection:**', `${videos.map(vid => `**${++index} -** ${vid.title}`).join('\n')}`)
+                        .addField(`**Enter a value between 1 - ${maxSearchResults}!**`, `(* ^ ω ^)`);
+    
+                    message.channel.send(embed);
+
+                    try {
+                        var response = await message.channel.awaitMessages(msg => msg.content > 0 && msg.content <= maxSearchResults, {
+                            maxMatches: 1,
+                            time: 15000,
+                            errors: ['time']
+                        });
+                    } catch (error) {
+                        console.error(error);
+                        return message.channel.send('Selection timed out or input was invalid. Please try again!');
+                    }
+                    
+                    const videoIndex = parseInt(response.first().content);
+                    var video = await youtube.getVideoByID(videos[videoIndex - 1].id);
                 } catch (error) {
                     console.error(error);
-                    return message.channel.send(`No search results found... :()`)
+                    return message.channel.send(`No search results found... :(`)
                 }
             }
 
