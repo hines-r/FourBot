@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { TOKEN, PREFIX, GOOGLE_API_KEY, DEJA_VU, BEYOND } = require('./config');
+const { TOKEN, PREFIX, GOOGLE_API_KEY, DEJA_VU, BEYOND, RUNNING } = require('./config');
 const ytdl = require('ytdl-core');
 const YouTube = require('simple-youtube-api');
 
@@ -77,6 +77,9 @@ client.on('message', async message => {
             }
             else if (searchString.toLowerCase() == 'beyond') {
                 searchString = BEYOND;
+            }
+            else if (searchString.toLowerCase() == 'running') {
+                searchString = RUNNING;
             }
 
             // Tries to get the specified number of search results via YouTube search
